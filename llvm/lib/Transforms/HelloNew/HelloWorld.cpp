@@ -7,7 +7,6 @@
 //===----------------------------------------------------------------------===//
 
 #include "llvm/Transforms/HelloNew/HelloWorld.h"
-// #include "llvm/Analysis/InstCount.h"
 
 using namespace llvm;
 
@@ -15,15 +14,16 @@ PreservedAnalyses HelloWorldPass::run(Function &F,
                                       FunctionAnalysisManager &AM) {
   
   outs() << "Start HelloWorldPass" << "\n";
+
   outs() << " name: " << F.getName() << "\n";
 
-  // outs() << " F getType getTypeID " << F.getType()->getTypeID() << "\n";
-  //getRType
   outs() << "  TypeID of Return Type:   " << F.getReturnType()->getTypeID() << "\n";
   
   outs() << "   Calling Convention:  " << F.getCallingConv() << "\n";
-    
-  outs() << "End HelloWorldPass" << "\n";
 
+  outs() << "   Instruction Count:  " << F.getInstructionCount() << "\n";
+
+  outs() << "End HelloWorldPass" << "\n";
+  
   return PreservedAnalyses::all();
 }
