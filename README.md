@@ -37,16 +37,27 @@ The LLVM Getting Started documentation may be out of date.  The [Clang
 Getting Started](http://clang.llvm.org/get_started.html) page might have more
 accurate information.
 
-This is an example work-flow and configuration to get and build the LLVM source:
 
-1. Checkout LLVM (including related sub-projects like Clang):
+Here are the steps I followed that should work for a Linux system:
 
-     * ``git clone https://github.com/llvm/llvm-project.git``
+1. Checkout LLVM, and checkout branch modify-pass:
+
+     * ``git clone https://github.com/log-of-e/llvm-project.git``
+     * ``git checkout modify-pass``
+    
 
      * Or, on windows, ``git clone --config core.autocrlf=false
     https://github.com/llvm/llvm-project.git``
 
-2. Configure and build LLVM and Clang:
+2. Ensure python 3 is available globally to cmake:
+    - pyenv instructions: https://github.com/pyenv/pyenv#installation, https://bgasparotto.com/install-pyenv-ubuntu-debian
+
+  ```
+  pyenv install 3.8.5
+  pyenv global 3.8.5
+  ```
+
+3. Configure and build LLVM using cmake :
 
      * ``cd llvm-project``
 
@@ -54,47 +65,20 @@ This is an example work-flow and configuration to get and build the LLVM source:
 
      * ``cd build``
 
-     * ``cmake -G <generator> [options] ../llvm``
+     * `` cmake -G "Unix Makefiles"  -DCMAKE_BUILD_TYPE=Release   ../llvm``
 
-        Some common build system generators are:
-
-        * ``Ninja`` --- for generating [Ninja](https://ninja-build.org)
-          build files. Most llvm developers use Ninja.
         * ``Unix Makefiles`` --- for generating make-compatible parallel makefiles.
-        * ``Visual Studio`` --- for generating Visual Studio projects and
-          solutions.
-        * ``Xcode`` --- for generating Xcode projects.
 
-        Some Common options:
+        Option explanations:
 
-        * ``-DLLVM_ENABLE_PROJECTS='...'`` --- semicolon-separated list of the LLVM
-          sub-projects you'd like to additionally build. Can include any of: clang,
-          clang-tools-extra, libcxx, libcxxabi, libunwind, lldb, compiler-rt, lld,
-          polly, or debuginfo-tests.
-
-          For example, to build LLVM, Clang, libcxx, and libcxxabi, use
-          ``-DLLVM_ENABLE_PROJECTS="clang;libcxx;libcxxabi"``.
-
-        * ``-DCMAKE_INSTALL_PREFIX=directory`` --- Specify for *directory* the full
-          path name of where you want the LLVM tools and libraries to be installed
-          (default ``/usr/local``).
 
         * ``-DCMAKE_BUILD_TYPE=type`` --- Valid options for *type* are Debug,
           Release, RelWithDebInfo, and MinSizeRel. Default is Debug.
 
-        * ``-DLLVM_ENABLE_ASSERTIONS=On`` --- Compile with assertion checks enabled
-          (default is Yes for Debug builds, No for all other build types).
+        
 
-      * ``cmake --build . [-- [options] <target>]`` or your build system specified above
-        directly.
 
-        * The default target (i.e. ``ninja`` or ``make``) will build all of LLVM.
-
-        * The ``check-all`` target (i.e. ``ninja check-all``) will run the
-          regression tests to ensure everything is in working order.
-
-        * CMake will generate targets for each tool and library, and most
-          LLVM sub-projects generate their own ``check-<project>`` target.
+      * ``make -j8`` to run the build from directory `build`
 
         * Running a serial build will be **slow**.  To improve speed, try running a
           parallel build.  That's done by default in Ninja; for ``make``, use the option
@@ -103,8 +87,24 @@ This is an example work-flow and configuration to get and build the LLVM source:
 
       * For more information see [CMake](https://llvm.org/docs/CMake.html)
 
-Consult the
-[Getting Started with LLVM](https://llvm.org/docs/GettingStarted.html#getting-started-with-llvm)
-page for detailed information on configuring and compiling LLVM. You can visit
-[Directory Layout](https://llvm.org/docs/GettingStarted.html#directory-layout)
+- I also consulted :
+  - [Getting Started with LLVM](https://llvm.org/docs/GettingStarted.html#getting-started-with-llvm)
+page for detailed information on configuring and compiling LLVM. 
+
+  - [Directory Layout](https://llvm.org/docs/GettingStarted.html#directory-layout)
 to learn about the layout of the source code tree.
+
+4. I followed instructions to build `opt` (from  http://llvm.org/docs/WritingAnLLVMNewPMPass.html#running-a-pass-with-opt) From inside `build` directory:
+  - ```
+      make opt -j8
+    ```
+5. To test against the IR test case run the command from inside `build` directory: 
+    ```
+      ./bin/opt -disable-output  ../llvm/testcases/testir.ll    -passes=helloworld 
+
+    ```
+6. To test against the c program I followed the instructions to generate IR from : http://llvm.org/docs/GettingStarted.html#example-with-clang and then I ran:
+    ```
+    ./bin/opt -disable-output  ../llvm/testcases/test1.bc    -passes=helloworld
+    ```
+
