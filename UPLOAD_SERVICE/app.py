@@ -75,9 +75,9 @@ def splitOptOutput(_infostr):
         methodDictionary={}
         splitArr0 = a.split("\n")[1:]
         methodDictionary['function']=splitArr0[0].split(":")[1].strip()
-        methodDictionary['rettype']=splitArr0[1].split(":")[1].strip()
-        methodDictionary['cconv']=splitArr0[2].split(":")[1].strip()
-        methodDictionary['isns']=splitArr0[3].split(":")[1].strip()
+        methodDictionary['rettype']=int(splitArr0[1].split(":")[1].strip())
+        methodDictionary['cconv']=int(splitArr0[2].split(":")[1].strip())
+        methodDictionary['isns']=int(splitArr0[3].split(":")[1].strip())
         resultList.append(methodDictionary)
     # print("resultList is {0}".format(resultList))
     return resultList
