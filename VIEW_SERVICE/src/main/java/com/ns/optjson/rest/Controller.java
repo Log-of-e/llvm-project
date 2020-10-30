@@ -23,7 +23,7 @@ public class Controller {
 
     String dir = "../../llvm-project/UPLOAD_SERVICE";
 
-    @GetMapping(value = "/process/{llfile}", headers = "Content-type=application/json")
+    @GetMapping(value = "/process/{llfile}", produces={"application/json"}, headers = "Content-type=application/json")
     @ResponseBody
     public String fileanalysis(@PathVariable String llfile) throws FileNotFoundException, SecurityException, OutOfMemoryError, IOException  {
 
