@@ -17,12 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 
+
 @RestController
 public class Controller {
 
     String dir = "../../llvm-project/UPLOAD_SERVICE";
 
-    @GetMapping("/process/{llfile}")
+    @GetMapping(value = "/process/{llfile}", headers = "Content-type=application/json")
     @ResponseBody
     public String fileanalysis(@PathVariable String llfile) throws FileNotFoundException, SecurityException, OutOfMemoryError, IOException  {
 
@@ -39,7 +40,7 @@ public class Controller {
         }
     }
     
-    @GetMapping("/file_list")
+    @GetMapping(value="/file_list", headers = "Content-type=application/json")
     @ResponseBody
     public String[] filelisting() {
 
