@@ -51,9 +51,8 @@ def saveOptRun(filename):
     agiantstr = app.config['OPT']+ "  -disable-output  ./{0} -passes=helloworld".format(filename)
     result = subprocess.run( shlex.split(agiantstr) , capture_output=True, text=True)
     info_jsonarray =  '['+result.stdout[:-1]+']'
-    __filename=os.path.join(app.config['UPLOAD_PATH'], filename+".json")
 
-    with open( __filename   , "w") as outfile:
+    with open( filename +".json"  , "w") as outfile:
         outfile.write(info_jsonarray)
         outfile.close()
     return
