@@ -13,17 +13,18 @@ using namespace llvm;
 PreservedAnalyses HelloWorldPass::run(Function &F,
                                       FunctionAnalysisManager &AM) {
   
-  outs() << "Start HelloWorldPass" << "\n";
-
-  outs() << " name: " << F.getName() << "\n";
-
-  outs() << "  TypeID of Return Type:   " << F.getReturnType()->getTypeID() << "\n";
   
-  outs() << "   Calling Convention:  " << F.getCallingConv() << "\n";
+  outs() << "{ " ;
 
-  outs() << "   Instruction Count:  " << F.getInstructionCount() << "\n";
+  outs() << "\"function\": \"" << F.getName() << "\", ";
 
-  outs() << "End HelloWorldPass" << "\n";
+  outs() << "\"rettype\": " << F.getReturnType()->getTypeID() << ", ";
+  
+  outs() << "\"cconv\": " << F.getCallingConv() << ", ";
+
+  outs() << "\"isns\": " << F.getInstructionCount() ;
+
+  outs() << " }," ;
   
   return PreservedAnalyses::all();
 }
