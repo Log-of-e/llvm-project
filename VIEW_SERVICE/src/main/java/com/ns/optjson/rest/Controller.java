@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import org.springframework.beans.factory.annotation.Value;
+
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 
@@ -22,14 +24,15 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 @RestController
 public class Controller {
 
-    String dir = "../../llvm-project/UPLOAD_SERVICE";
+    @Value("${filedir}")
+    String dir;
+
 
     @GetMapping(value = "/process/{llfile}", produces={"application/json"}, headers = "Content-type=application/json")
     @ResponseBody
     public String fileanalysis(@PathVariable String llfile) throws FileNotFoundException, SecurityException, OutOfMemoryError, IOException  {
 
         try {
-            // String dir = "../../llvm-project/UPLOAD_SERVICE";
 
             Path _path =  Paths.get(dir,llfile+ ".ll.json");
             String contents = Files.readString(_path, StandardCharsets.ISO_8859_1);
@@ -56,6 +59,7 @@ public class Controller {
         };
     
         pathnames = f.list(filter);
+
         return pathnames;
     }
 }
